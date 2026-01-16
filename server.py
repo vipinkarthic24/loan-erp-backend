@@ -495,6 +495,11 @@ async def apply_for_loan(request: LoanApplicationRequest, token_data: dict = Dep
         else:
             emi_eligible = False
         log_details += f" | EMI Eligible (30% rule): {emi_eligible}"
+        cursor.execute(
+            "UPDATE customers SET monthly_income = ? WHERE id = ?",
+            (request.monthly_income, customer['id'])
+        )
+
 
         # 7. Final Database Insert (ONLY ONE)
         loan_id = str(uuid.uuid4())
@@ -1098,3 +1103,4 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Final Build Sync 2026
